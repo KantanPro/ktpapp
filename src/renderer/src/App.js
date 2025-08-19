@@ -1,11 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import WordPressLayout from './components/WordPressLayout';
 import MainContent from './components/MainContent';
 import SettingsModal from './components/SettingsModal';
+import Header from './components/Header';
 
 // Modal のルート要素を設定
 Modal.setAppElement('#root');
+
+// スタイルコンポーネント
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f5f5f5;
+`;
+
+const ContentArea = styled.div`
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+`;
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);

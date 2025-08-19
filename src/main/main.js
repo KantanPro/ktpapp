@@ -1,7 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require("electron");
 const path = require("path");
 const Store = require("electron-store");
-// const DatabaseManager = require("./database"); // 一時的に無効化
+const DatabaseManager = require("./database");
 
 // 設定ストア
 const store = new Store();
@@ -267,8 +267,14 @@ ipcMain.handle("send-email", async (event, emailData) => {
 });
 
 app.whenReady().then(async () => {
-  // データベース初期化（一時的に無効化）
-  console.log("データベース機能は一時的に無効化されています");
+  try {
+    // データベース初期化
+    database = new DatabaseManager();
+    await database.init();
+    console.log("データベースが正常に初期化されました");
+  } catch (error) {
+    console.error("データベース初期化エラー:", error);
+  }
 
   createWindow();
 });

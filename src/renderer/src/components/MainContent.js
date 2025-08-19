@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import { 
   FaList, FaFileInvoice, FaUsers, FaCogs, FaHandshake, FaChartBar,
   FaPlus, FaSearch, FaFilter, FaDownload, FaUpload, FaEdit, FaTrash,
-  FaEye, FaPrint, FaComments, FaCalendarAlt, FaMoneyBillWave
+  FaEye, FaPrint, FaComments, FaCalendarAlt, FaMoneyBillWave, FaDatabase
 } from 'react-icons/fa';
 import ClientManager from './ClientManager';
 import OrderManager from './OrderManager';
@@ -11,6 +11,8 @@ import ServiceManager from './ServiceManager';
 import SupplierManager from './SupplierManager';
 import ReportManager from './ReportManager';
 import StaffChat from './StaffChat';
+import DummyDataManager from './DummyDataManager';
+import InvoiceManager from './InvoiceManager';
 
 const ContentContainer = styled.div`
   flex: 1;
@@ -212,6 +214,12 @@ const EmptyState = styled.div`
 function MainContent({ settings }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [dashboardData, setDashboardData] = useState({
+    clientCount: 0,
+    orderCount: 0,
+    revenue: '¥0',
+    pendingInvoices: 0
+  });
 
   // サンプルデータ
   const sampleOrders = [
@@ -226,7 +234,8 @@ function MainContent({ settings }) {
     { id: 3, name: '例示株式会社', contact: '鈴木一郎', email: 'suzuki@example.co.jp', phone: '052-1111-2222' },
   ];
 
-  const tabs = [
+  // tabs配列をuseMemoで最適化
+  const tabs = useMemo(() => [
     { id: 'dashboard', name: 'ダッシュボード', icon: FaChartBar },
     { id: 'orders', name: '仕事リスト', icon: FaList },
     { id: 'invoices', name: '伝票処理', icon: FaFileInvoice },
@@ -234,7 +243,51 @@ function MainContent({ settings }) {
     { id: 'services', name: 'サービス管理', icon: FaCogs },
     { id: 'suppliers', name: '協力会社', icon: FaHandshake },
     { id: 'reports', name: 'レポート', icon: FaChartBar },
-  ];
+    { id: 'dummy-data', name: 'ダミーデータ管理', icon: FaDatabase },
+  ], []);
+
+  // ダッシュボードデータを取得
+  useEffect(() => {
+    if (activeTab === 'dashboard') {
+      loadDashboardData();
+    }
+  }, [activeTab]);
+
+  // デバッグ用：コンポーネントマウント時にタブ情報を出力
+  useEffect(() => {
+    console.log('=== MainContent コンポーネントがマウントされました ===');
+    console.log('利用可能なタブ:', tabs);
+    console.log('現在のアクティブタブ:', activeTab);
+    console.log('タブの数:', tabs.length);
+    
+    // 各タブの詳細を確認
+    tabs.forEach((tab, index) => {
+      console.log(`タブ${index + 1}:`, tab.id, tab.name, tab.icon);
+    });
+  }, [tabs, activeTab]);
+
+  // アクティブタブが変更されたときのログ
+  useEffect(() => {
+    console.log('アクティブタブが変更されました:', activeTab);
+  }, [activeTab]);
+
+  const loadDashboardData = async () => {
+    try {
+      if (window.electronAPI) {
+        const clients = await window.electronAPI.getClients(1000, 0);
+        const orders = await window.electronAPI.getOrders(1000, 0);
+        
+        setDashboardData({
+          clientCount: clients.length,
+          orderCount: orders.filter(order => order.status === '進行中').length,
+          revenue: '¥0', // 実際の売上計算は後で実装
+          pendingInvoices: orders.filter(order => order.status === '受注').length
+        });
+      }
+    } catch (error) {
+      console.error('ダッシュボードデータの読み込みエラー:', error);
+    }
+  };
 
   const handleAction = (actionName) => {
     console.log(`実行中: ${actionName}`);
@@ -255,19 +308,19 @@ function MainContent({ settings }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '30px' }}>
               <div style={{ background: '#e3f2fd', padding: '20px', borderRadius: '12px' }}>
                 <h4 style={{ margin: '0 0 10px 0', color: '#1976d2' }}>進行中の案件</h4>
-                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#1976d2' }}>12件</p>
+                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#1976d2' }}>{dashboardData.orderCount}件</p>
               </div>
               <div style={{ background: '#e8f5e8', padding: '20px', borderRadius: '12px' }}>
                 <h4 style={{ margin: '0 0 10px 0', color: '#388e3c' }}>今月の売上</h4>
-                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#388e3c' }}>¥2,450,000</p>
+                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#388e3c' }}>{dashboardData.revenue}</p>
               </div>
               <div style={{ background: '#fff3e0', padding: '20px', borderRadius: '12px' }}>
                 <h4 style={{ margin: '0 0 10px 0', color: '#f57c00' }}>未請求案件</h4>
-                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#f57c00' }}>5件</p>
+                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#f57c00' }}>{dashboardData.pendingInvoices}件</p>
               </div>
               <div style={{ background: '#f3e5f5', padding: '20px', borderRadius: '12px' }}>
                 <h4 style={{ margin: '0 0 10px 0', color: '#7b1fa2' }}>顧客数</h4>
-                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#7b1fa2' }}>28社</p>
+                <p style={{ margin: 0, fontSize: '24px', fontWeight: 'bold', color: '#7b1fa2' }}>{dashboardData.clientCount}社</p>
               </div>
             </div>
             
@@ -298,35 +351,7 @@ function MainContent({ settings }) {
         return <ClientManager />;
 
       case 'invoices':
-        return (
-          <div>
-            <h2>伝票処理</h2>
-            <ActionBar>
-              <ActionButton primary onClick={() => handleAction('新規受注書作成')}>
-                <FaPlus />
-                新規受注書
-              </ActionButton>
-              <ActionButton onClick={() => handleAction('請求書作成')}>
-                <FaFileInvoice />
-                請求書作成
-              </ActionButton>
-              <ActionButton onClick={() => handleAction('PDF出力')}>
-                <FaPrint />
-                PDF出力
-              </ActionButton>
-              <ActionButton onClick={() => handleAction('一括処理')}>
-                <FaDownload />
-                一括処理
-              </ActionButton>
-            </ActionBar>
-            
-            <EmptyState>
-              <FaFileInvoice />
-              <h3>伝票処理</h3>
-              <p>受注書や請求書の作成・管理を行います</p>
-            </EmptyState>
-          </div>
-        );
+        return <InvoiceManager />;
 
       case 'services':
         return <ServiceManager />;
@@ -336,6 +361,9 @@ function MainContent({ settings }) {
 
       case 'reports':
         return <ReportManager />;
+
+      case 'dummy-data':
+        return <DummyDataManager />;
 
       default:
         return <div>タブが見つかりません</div>;
