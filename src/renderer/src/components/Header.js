@@ -6,22 +6,50 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px 20px;
+  background: #34495e;
   color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #2c3e50;
   min-height: 60px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const Logo = styled.div`
   display: flex;
   align-items: center;
-  font-size: 24px;
-  font-weight: bold;
+  gap: 12px;
+  
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
   
   h1 {
     margin: 0;
     font-size: 24px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.025em;
+  }
+  
+  .status-info {
+    font-size: 12px;
+    color: #bdc3c7;
+    margin-top: 2px;
   }
 `;
 
@@ -31,45 +59,24 @@ const HeaderActions = styled.div`
   gap: 15px;
 `;
 
-const SettingsButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
-  }
-  
-  &:active {
-    transform: rotate(90deg) scale(0.95);
-  }
-  
-  svg {
-    font-size: 18px;
-  }
-`;
-
 const StatusIndicator = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  padding: 8px 12px;
+  background: rgba(46, 204, 113, 0.2);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 15px;
+  font-size: 12px;
+  color: #27ae60;
+  font-weight: 500;
   
   &::before {
     content: '';
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: #4ade80;
+    background: #27ae60;
     animation: pulse 2s infinite;
   }
   
@@ -83,11 +90,44 @@ const StatusIndicator = styled.div`
   }
 `;
 
-function Header({ onSettingsClick }) {
+const SettingsButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ecf0f1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+  
+  svg {
+    font-size: 16px;
+  }
+`;
+
+function Header({ onSettingsClick, settings }) {
   return (
     <HeaderContainer>
       <Logo>
-        <h1>KantanPro</h1>
+        <div className="logo-icon">K</div>
+        <div className="logo-text">
+          <h1>KantanPro</h1>
+          <div className="status-info">
+            現在のタブ: ダッシュボード | テーマ: ダーク | 自動保存: {settings.autoSave ? 'ON' : 'OFF'}
+          </div>
+        </div>
       </Logo>
       
       <HeaderActions>
@@ -97,7 +137,7 @@ function Header({ onSettingsClick }) {
         
         <SettingsButton 
           onClick={onSettingsClick}
-          title="設定を開く"
+          title="設定"
         >
           <FaCog />
         </SettingsButton>

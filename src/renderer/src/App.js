@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import WordPressLayout from './components/WordPressLayout';
 import MainContent from './components/MainContent';
 import SettingsModal from './components/SettingsModal';
 import Header from './components/Header';
@@ -9,12 +8,15 @@ import Header from './components/Header';
 // Modal のルート要素を設定
 Modal.setAppElement('#root');
 
-// スタイルコンポーネント
+// 画像のKantanPro風のスタイルコンポーネント
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
   background: #f5f5f5;
+  font-family: 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', Meiryo, sans-serif;
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const ContentArea = styled.div`
@@ -26,7 +28,7 @@ const ContentArea = styled.div`
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [settings, setSettings] = useState({
-    theme: 'light',
+    theme: 'dark',
     language: 'ja',
     autoSave: true,
     notifications: true,
@@ -100,19 +102,16 @@ function App() {
         await window.electronAPI.saveSettings(newSettings);
         setSettings(newSettings);
         setIsSettingsOpen(false);
-        console.log('設定が保存されました');
+        console.log('設定を保存しました');
       } catch (error) {
         console.error('設定の保存に失敗しました:', error);
       }
-    } else {
-      setSettings(newSettings);
-      setIsSettingsOpen(false);
     }
   };
 
   return (
     <AppContainer>
-      <Header onSettingsClick={handleSettingsOpen} />
+      <Header onSettingsClick={handleSettingsOpen} settings={settings} />
       <ContentArea>
         <MainContent settings={settings} />
       </ContentArea>
