@@ -254,9 +254,62 @@ ipcMain.handle("db-get-monthly-report", async (event, year, month) => {
 
 // PDF生成関連
 ipcMain.handle("generate-pdf", async (event, type, data) => {
-  // PDF生成ロジックをここに実装
-  console.log("PDF生成:", type, data);
-  return { success: true, path: "/path/to/generated.pdf" };
+  try {
+    console.log("PDF生成:", type, data);
+    
+    if (type === 'invoice') {
+      // 請求書PDFの生成
+      const { app } = require('electron');
+      const path = require('path');
+      const fs = require('fs');
+      
+      // デスクトップに保存
+      const desktopPath = app.getPath('desktop');
+      const fileName = `請求書_${data.invoiceNumber}_${new Date().toISOString().split('T')[0]}.txt`;
+      const filePath = path.join(desktopPath, fileName);
+      
+      // 請求書の内容を生成
+      let content = '';
+      content += '=====================================\n';
+      content += '           請求書\n';
+      content += '=====================================\n\n';
+      content += `請求書番号: ${data.invoiceNumber}\n`;
+      content += `発行日: ${data.issueDate}\n`;
+      content += `支払期限: ${data.dueDate}\n\n`;
+      
+      if (data.orderData) {
+        content += `案件名: ${data.orderData.project_name}\n`;
+        content += `顧客名: ${data.orderData.client_name || '未設定'}\n\n`;
+      }
+      
+      content += `税抜金額: ¥${data.totalAmount?.toLocaleString() || '0'}\n`;
+      content += `消費税 (${data.taxRate}%): ¥${data.taxAmount?.toLocaleString() || '0'}\n`;
+      content += `税込金額: ¥${((data.totalAmount || 0) * (1 + data.taxRate / 100)).toLocaleString()}\n\n`;
+      
+      if (data.notes) {
+        content += `備考:\n${data.notes}\n\n`;
+      }
+      
+      content += '=====================================\n';
+      content += 'この度はご利用いただき、ありがとうございます。\n';
+      content += '=====================================\n';
+      
+      // ファイルに保存
+      fs.writeFileSync(filePath, content, 'utf8');
+      
+      return { 
+        success: true, 
+        path: filePath,
+        message: `請求書がデスクトップに保存されました: ${fileName}`
+      };
+    }
+    
+    return { success: false, message: '未対応のPDFタイプです' };
+    
+  } catch (error) {
+    console.error('PDF生成エラー:', error);
+    return { success: false, message: error.message };
+  }
 });
 
 // メール送信関連
