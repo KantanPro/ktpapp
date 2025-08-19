@@ -1,0 +1,106 @@
+{
+  "name": "kantan-pro-desktop",
+  "version": "1.0.0",
+  "description": "フリーランス・スモールビジネス向けの業務管理システム - KantanPro Desktop Application",
+  "author": "KantanPro <info@kantanpro.com>",
+  "homepage": "https://www.kantanpro.com",
+  "license": "MIT",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run start-renderer\" \"wait-on http://localhost:3000 && electron .\"",
+    "start-renderer": "cd src/renderer && npm start",
+    "build": "npm run build-renderer && electron-builder",
+    "build-renderer": "cd src/renderer && npm run build",
+    "dist": "npm run build",
+    "pack": "electron-builder --dir",
+    "postinstall": "electron-builder install-app-deps",
+    "build-installer": "node build-installer.js",
+    "rebuild": "electron-rebuild",
+    "check-assets": "node check-assets.js",
+    "create-icons": "node create-icons.js"
+  },
+  "build": {
+    "appId": "com.kantanpro.desktop",
+    "productName": "KantanPro Desktop",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/main/**/*",
+      "src/renderer/build/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "build/icons/",
+        "to": "icons/",
+        "filter": ["**/*"]
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icons/icon.png",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ]
+    },
+    "win": {
+      "icon": "build/icons/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "linux": {
+      "icon": "build/icons/icon.png",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icons/icon.png",
+      "uninstallerIcon": "build/icons/icon.png",
+      "installerHeaderIcon": "build/icons/icon.png",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "dmg": {
+      "title": "KantanPro Desktop",
+      "icon": "build/icons/icon.png",
+      "background": "build/icons/icon.png",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "electron-rebuild": "^3.2.9",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.0.1"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  }
+}

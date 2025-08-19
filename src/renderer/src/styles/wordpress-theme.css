@@ -1,0 +1,495 @@
+/* WordPress管理画面風のスタイル - KantanPro Desktop */
+
+:root {
+  /* WordPress管理画面のカラーパレット */
+  --wp-admin-blue: #0073aa;
+  --wp-admin-blue-hover: #005a87;
+  --wp-admin-blue-light: #00a0d2;
+  --wp-admin-gray: #23282d;
+  --wp-admin-gray-light: #32373c;
+  --wp-admin-gray-lighter: #464b50;
+  --wp-admin-border: #ddd;
+  --wp-admin-border-light: #e5e5e5;
+  --wp-admin-bg: #f1f1f1;
+  --wp-admin-white: #fff;
+  --wp-admin-text: #23282d;
+  --wp-admin-text-light: #666;
+  --wp-admin-success: #46b450;
+  --wp-admin-warning: #ffb900;
+  --wp-admin-error: #dc3232;
+}
+
+/* 全体のリセット */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  line-height: 1.4em;
+  color: var(--wp-admin-text);
+  background: var(--wp-admin-bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* WordPress風のヘッダー */
+.wp-header {
+  background: var(--wp-admin-gray);
+  color: #fff;
+  padding: 0;
+  height: 32px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wp-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.wp-header-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  text-decoration: none;
+}
+
+.wp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wp-header-button {
+  background: none;
+  border: none;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.wp-header-button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* メインコンテンツエリア */
+.wp-main {
+  margin-top: 32px;
+  display: flex;
+  min-height: calc(100vh - 32px);
+}
+
+/* WordPress風のサイドバー */
+.wp-sidebar {
+  width: 160px;
+  background: var(--wp-admin-gray-light);
+  border-right: 1px solid var(--wp-admin-border);
+  padding: 0;
+  overflow-y: auto;
+}
+
+.wp-sidebar-menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wp-sidebar-menu-item {
+  margin: 0;
+  border-bottom: 1px solid var(--wp-admin-gray-lighter);
+}
+
+.wp-sidebar-menu-link {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  color: #eee;
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.wp-sidebar-menu-link:hover {
+  background: var(--wp-admin-blue);
+  color: #fff;
+}
+
+.wp-sidebar-menu-link.active {
+  background: var(--wp-admin-blue);
+  color: #fff;
+  box-shadow: inset 4px 0 0 var(--wp-admin-blue-light);
+}
+
+.wp-sidebar-menu-icon {
+  margin-right: 8px;
+  font-size: 16px;
+  width: 16px;
+  text-align: center;
+}
+
+/* メインコンテンツ */
+.wp-content {
+  flex: 1;
+  background: var(--wp-admin-white);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* WordPress風のページタイトル */
+.wp-page-title {
+  font-size: 23px;
+  font-weight: 400;
+  margin: 0 0 20px 0;
+  padding: 9px 0 4px 0;
+  color: var(--wp-admin-text);
+  line-height: 1.3;
+}
+
+/* WordPress風のボタン */
+.wp-button {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 2.15384615;
+  min-height: 30px;
+  margin: 0;
+  padding: 0 10px;
+  cursor: pointer;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  background: #f7f7f7;
+  border-color: #ccc;
+  color: #555;
+  vertical-align: top;
+  transition: all 0.1s ease-in-out;
+}
+
+.wp-button:hover {
+  background: #fafafa;
+  border-color: #999;
+  color: #23282d;
+}
+
+.wp-button.primary {
+  background: var(--wp-admin-blue);
+  border-color: var(--wp-admin-blue);
+  color: #fff;
+}
+
+.wp-button.primary:hover {
+  background: var(--wp-admin-blue-hover);
+  border-color: var(--wp-admin-blue-hover);
+  color: #fff;
+}
+
+.wp-button:disabled {
+  color: #a0a5aa !important;
+  border-color: #ddd !important;
+  background: #f7f7f7 !important;
+  cursor: default;
+}
+
+/* WordPress風のテーブル */
+.wp-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: var(--wp-admin-white);
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wp-table th {
+  background: #f9f9f9;
+  border-bottom: 1px solid var(--wp-admin-border);
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--wp-admin-text);
+}
+
+.wp-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--wp-admin-border-light);
+  font-size: 13px;
+  vertical-align: top;
+}
+
+.wp-table tr:hover {
+  background: #f9f9f9;
+}
+
+/* WordPress風のフォーム */
+.wp-form-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5em;
+  clear: both;
+}
+
+.wp-form-table th {
+  width: 200px;
+  padding: 20px 10px 20px 0;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.wp-form-table td {
+  padding: 15px 10px 20px 0;
+  vertical-align: top;
+}
+
+.wp-form-input {
+  font-size: 14px;
+  padding: 3px 5px;
+  margin: 0;
+  border: 1px solid var(--wp-admin-border);
+  border-radius: 0;
+  background: var(--wp-admin-white);
+  color: var(--wp-admin-text);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+}
+
+.wp-form-input:focus {
+  border-color: var(--wp-admin-blue-light);
+  box-shadow: 0 0 0 1px var(--wp-admin-blue-light);
+  outline: 2px solid transparent;
+}
+
+/* WordPress風のタブ */
+.wp-tabs {
+  margin: 0 0 20px 0;
+  border-bottom: 1px solid var(--wp-admin-border);
+}
+
+.wp-tabs-list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wp-tab {
+  margin: 0 5px -1px 0;
+}
+
+.wp-tab-link {
+  display: block;
+  padding: 8px 14px;
+  background: #e4e4e4;
+  border: 1px solid var(--wp-admin-border);
+  border-bottom: none;
+  color: var(--wp-admin-text);
+  text-decoration: none;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+
+.wp-tab-link:hover {
+  background: #fff;
+}
+
+.wp-tab-link.active {
+  background: var(--wp-admin-white);
+  color: var(--wp-admin-text);
+  border-bottom: 1px solid var(--wp-admin-white);
+  margin-bottom: -1px;
+}
+
+/* WordPress風の通知 */
+.wp-notice {
+  background: var(--wp-admin-white);
+  border-left: 4px solid #fff;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+  margin: 5px 15px 2px 0;
+  padding: 1px 12px;
+}
+
+.wp-notice.success {
+  border-left-color: var(--wp-admin-success);
+}
+
+.wp-notice.warning {
+  border-left-color: var(--wp-admin-warning);
+}
+
+.wp-notice.error {
+  border-left-color: var(--wp-admin-error);
+}
+
+.wp-notice p {
+  margin: 0.5em 0;
+  padding: 2px;
+  font-size: 13px;
+}
+
+/* WordPress風のメタボックス */
+.wp-metabox {
+  background: var(--wp-admin-white);
+  border: 1px solid var(--wp-admin-border);
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+  margin-bottom: 20px;
+}
+
+.wp-metabox-header {
+  background: #f9f9f9;
+  border-bottom: 1px solid var(--wp-admin-border);
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wp-admin-text);
+}
+
+.wp-metabox-content {
+  padding: 12px;
+}
+
+/* WordPress風のステータスバッジ */
+.wp-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 2px;
+  color: var(--wp-admin-white);
+}
+
+.wp-status-badge.draft {
+  background: #666;
+}
+
+.wp-status-badge.pending {
+  background: var(--wp-admin-warning);
+}
+
+.wp-status-badge.published {
+  background: var(--wp-admin-success);
+}
+
+.wp-status-badge.private {
+  background: var(--wp-admin-error);
+}
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 782px) {
+  .wp-sidebar {
+    width: 36px;
+  }
+  
+  .wp-sidebar-menu-link {
+    padding: 8px;
+    justify-content: center;
+  }
+  
+  .wp-sidebar-menu-text {
+    display: none;
+  }
+  
+  .wp-sidebar-menu-icon {
+    margin-right: 0;
+  }
+  
+  .wp-content {
+    padding: 10px;
+  }
+  
+  .wp-form-table th {
+    width: auto;
+    padding: 10px 0;
+  }
+  
+  .wp-form-table td {
+    padding: 10px 0;
+  }
+}
+
+/* KantanPro固有のスタイル */
+.ktpwp-container {
+  background: var(--wp-admin-white);
+  min-height: 100vh;
+}
+
+.ktpwp-header {
+  background: var(--wp-admin-gray);
+  color: #fff;
+  padding: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.ktpwp-main-content {
+  margin-top: 0;
+  display: flex;
+  min-height: calc(100vh - 32px);
+}
+
+.ktpwp-sidebar {
+  width: 160px;
+  background: var(--wp-admin-gray-light);
+  border-right: 1px solid var(--wp-admin-border);
+}
+
+.ktpwp-content-area {
+  flex: 1;
+  background: var(--wp-admin-white);
+  padding: 20px;
+}
+
+/* アニメーション */
+.wp-fade-in {
+  animation: wpFadeIn 0.3s ease-in-out;
+}
+
+@keyframes wpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wp-slide-in {
+  animation: wpSlideIn 0.2s ease-out;
+}
+
+@keyframes wpSlideIn {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
